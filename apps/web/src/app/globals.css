@@ -86,47 +86,46 @@
 /* -----------------------------------------------------------------------------
    CSS Custom Properties — Design Tokens
    ----------------------------------------------------------------------------- */
-@layer base {
   :root {
     /* Background & Foreground */
-    --background: 0 0% 100%;
-    --foreground: 222 47% 11%;
+    --background: 210 40% 98%; /* #F8FAFC */
+    --foreground: 221 39% 11%; /* #111827 */
 
     /* Card */
-    --card: 0 0% 100%;
-    --card-foreground: 222 47% 11%;
+    --card: 0 0% 100%; /* #FFFFFF */
+    --card-foreground: 221 39% 11%;
 
     /* Popover */
     --popover: 0 0% 100%;
-    --popover-foreground: 222 47% 11%;
+    --popover-foreground: 221 39% 11%;
 
-    /* Primary — Ocean Blue */
-    --primary: 213 94% 50%;
+    /* Primary — Premium Red #C62026 */
+    --primary: 358 72% 45%;
     --primary-foreground: 0 0% 100%;
 
-    /* Secondary */
-    --secondary: 214 32% 91%;
-    --secondary-foreground: 222 47% 11%;
+    /* Secondary — #D32F2F */
+    --secondary: 0 63% 50%;
+    --secondary-foreground: 0 0% 100%;
 
     /* Muted */
-    --muted: 214 32% 96%;
-    --muted-foreground: 215 16% 47%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
 
     /* Accent — Seaweed Green */
     --accent: 142 71% 45%;
     --accent-foreground: 0 0% 100%;
 
     /* Destructive */
-    --destructive: 0 84% 60%;
+    --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 100%;
 
     /* Border, Input, Ring */
-    --border: 214 32% 91%;
-    --input: 214 32% 91%;
-    --ring: 213 94% 50%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 358 72% 45%;
 
-    /* Border Radius */
-    --radius: 0.5rem;
+    /* Border Radius: 20px */
+    --radius: 1.25rem;
 
     /* Charts */
     --chart-1: 213 94% 50%;
