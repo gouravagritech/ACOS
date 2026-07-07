@@ -1,0 +1,44 @@
+{
+  "name": "acos",
+  "version": "0.1.0",
+  "private": true,
+  "description": "ACOS - Aqua Colloids Operating System: AI-native Commercial Intelligence Platform for Aquagri Processing Pvt Ltd",
+  "scripts": {
+    "build": "turbo build",
+    "dev": "turbo dev",
+    "lint": "turbo lint",
+    "format": "prettier --write \"**/*.{ts,tsx,md,json}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,md,json}\"",
+    "typecheck": "turbo typecheck",
+    "test": "turbo test",
+    "test:e2e": "turbo test:e2e",
+    "clean": "turbo clean && rimraf node_modules",
+    "db:generate": "turbo db:generate",
+    "db:migrate": "turbo db:migrate",
+    "db:studio": "turbo db:studio",
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "husky": "^9.0.0",
+    "lint-staged": "^15.0.0",
+    "pg": "^8.22.0",
+    "prettier": "^3.4.0",
+    "prettier-plugin-tailwindcss": "^0.6.0",
+    "rimraf": "^6.0.0",
+    "turbo": "^2.3.0"
+  },
+  "packageManager": "pnpm@9.15.0",
+  "engines": {
+    "node": ">=20.0.0",
+    "pnpm": ">=9.0.0"
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{md,json,yaml,yml}": [
+      "prettier --write"
+    ]
+  }
+}

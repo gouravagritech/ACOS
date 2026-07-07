@@ -1,0 +1,128 @@
+{
+  "name": "ACOS Commercial Ingestion and Pipeline Automation",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "leads-inbox",
+        "options": {}
+      },
+      "id": "trigger-webhook-leads",
+      "name": "Webhook: Website/Marketplace Lead Ingest",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [100, 300]
+    },
+    {
+      "parameters": {
+        "url": "=https://acos.aquacolloids.local/api/v1/leads/score",
+        "method": "POST",
+        "bodyParameters": {
+          "leadId": "={{ $json.body.leadId }}",
+          "query": "={{ $json.body.query }}"
+        }
+      },
+      "id": "node-ai-scoring",
+      "name": "Call AI Scoring Endpoint",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [300, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "number": [
+            {
+              "value1": "={{ $json.body.score }}",
+              "operation": "larger",
+              "value2": 70
+            }
+          ]
+        }
+      },
+      "id": "node-check-qualified",
+      "name": "Verify Qualified (Score > 70)",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [500, 300]
+    },
+    {
+      "parameters": {
+        "url": "=https://acos.aquacolloids.local/api/v1/leads/assign",
+        "method": "POST",
+        "bodyParameters": {
+          "leadId": "={{ $json.body.leadId }}"
+        }
+      },
+      "id": "node-routing-assign",
+      "name": "Automate Regional Rep Assignment",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [700, 200]
+    },
+    {
+      "parameters": {
+        "url": "https://api.meta.whatsapp.com/v1/messages",
+        "method": "POST",
+        "headers": {
+          "Authorization": "Bearer ={{ $credentials.whatsappToken }}"
+        },
+        "bodyParameters": {
+          "to": "={{ $json.body.phone }}",
+          "template": "acos_welcome_leads"
+        }
+      },
+      "id": "node-whatsapp-welcome",
+      "name": "Send Welcome WhatsApp Template",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [900, 200]
+    }
+  ],
+  "connections": {
+    "trigger-webhook-leads": {
+      "main": [
+        [
+          {
+            "node": "node-ai-scoring",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "node-ai-scoring": {
+      "main": [
+        [
+          {
+            "node": "node-check-qualified",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "node-check-qualified": {
+      "main": [
+        [
+          {
+            "node": "node-routing-assign",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "node-routing-assign": {
+      "main": [
+        [
+          {
+            "node": "node-whatsapp-welcome",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

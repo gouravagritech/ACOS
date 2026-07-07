@@ -1,0 +1,36 @@
+# Turbo cache
+.turbo/
+
+# Next.js build output
+.next/
+out/
+build/
+dist/
+
+# Node modules
+node_modules/
+.pnpm-store/
+
+# Generated files
+*.generated.ts
+src/generated/
+
+# Coverage reports
+coverage/
+playwright-report/
+test-results/
+
+# Drizzle migrations (generated)
+drizzle/
+
+# Storybook
+storybook-static/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Supabase temp
+supabase/.temp/
+supabase/.branches/

@@ -1,0 +1,65 @@
+{
+  "name": "ACOS Executive Intelligence and OKR rollup automation",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "executive-briefing",
+        "options": {}
+      },
+      "id": "trigger-webhook-executive",
+      "name": "Webhook: Weekly Digest Scheduled Trigger",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [100, 300]
+    },
+    {
+      "parameters": {
+        "url": "=https://acos.aquacolloids.local/api/v1/executive/briefing/generate",
+        "method": "POST",
+        "bodyParameters": {}
+      },
+      "id": "node-ai-briefing",
+      "name": "Compile AI C-suite Executive Briefing",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [300, 300]
+    },
+    {
+      "parameters": {
+        "url": "=https://acos.aquacolloids.local/api/v1/executive/okrs/sync",
+        "method": "POST",
+        "bodyParameters": {}
+      },
+      "id": "node-okr-sync",
+      "name": "Sync Department OKR cascade completion scores",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [500, 300]
+    }
+  ],
+  "connections": {
+    "trigger-webhook-executive": {
+      "main": [
+        [
+          {
+            "node": "node-ai-briefing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "node-ai-briefing": {
+      "main": [
+        [
+          {
+            "node": "node-okr-sync",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

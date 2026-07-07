@@ -1,0 +1,70 @@
+﻿{
+  "name": "ACOS Marketing Campaigns and content intelligence automation",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "content-auto-kit",
+        "options": {}
+      },
+      "id": "trigger-webhook-marketing",
+      "name": "Webhook: New Product Launch Trigger",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [100, 300]
+    },
+    {
+      "parameters": {
+        "url": "=https://acos.aquacolloids.local/api/v1/marketing/content/generate",
+        "method": "POST",
+        "bodyParameters": {
+          "topic": "={{ $json.body.productName }}",
+          "channel": "linkedin"
+        }
+      },
+      "id": "node-ai-linkedin-draft",
+      "name": "Generate LinkedIn Product Post Copy",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [300, 300]
+    },
+    {
+      "parameters": {
+        "url": "=https://acos.aquacolloids.local/api/v1/marketing/email/compile",
+        "method": "POST",
+        "bodyParameters": {
+          "productName": "={{ $json.body.productName }}"
+        }
+      },
+      "id": "node-ai-newsletter-draft",
+      "name": "Draft Subscriber Newsletter Section",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [500, 300]
+    }
+  ],
+  "connections": {
+    "trigger-webhook-marketing": {
+      "main": [
+        [
+          {
+            "node": "node-ai-linkedin-draft",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "node-ai-linkedin-draft": {
+      "main": [
+        [
+          {
+            "node": "node-ai-newsletter-draft",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

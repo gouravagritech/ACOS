@@ -1,0 +1,69 @@
+{
+  "name": "ACOS External Portals and distributor API sync automation",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "portals-register",
+        "options": {}
+      },
+      "id": "trigger-webhook-portals",
+      "name": "Webhook: Customer Portal Sign-up Ingest",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [100, 300]
+    },
+    {
+      "parameters": {
+        "url": "=https://acos.aquacolloids.local/api/v1/portals/invite",
+        "method": "POST",
+        "bodyParameters": {
+          "email": "={{ $json.body.email }}"
+        }
+      },
+      "id": "node-portal-magic-link",
+      "name": "Send magic link registration email",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [300, 300]
+    },
+    {
+      "parameters": {
+        "url": "=https://acos.aquacolloids.local/api/v1/portals/distributor/credit-sync",
+        "method": "POST",
+        "bodyParameters": {
+          "distributorId": "={{ $json.body.distributorId }}"
+        }
+      },
+      "id": "node-distributor-sync",
+      "name": "Sync Distributor credit limits to ERP",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [500, 300]
+    }
+  ],
+  "connections": {
+    "trigger-webhook-portals": {
+      "main": [
+        [
+          {
+            "node": "node-portal-magic-link",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "node-portal-magic-link": {
+      "main": [
+        [
+          {
+            "node": "node-distributor-sync",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

@@ -1,0 +1,12 @@
+﻿{
+  "name": "acos-migration-tool",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "ts-node src/index.ts"
+  },
+  "dependencies": {
+    "papaparse": "^5.4.1",
+    "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.2/xlsx-0.20.2.tgz"
+  }
+}

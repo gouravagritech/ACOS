@@ -1,0 +1,70 @@
+{
+  "name": "ACOS Operations Manufacturing and Supply Chain automation",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "operations-reorder",
+        "options": {}
+      },
+      "id": "trigger-webhook-operations",
+      "name": "Webhook: Low Stock Alert Trigger",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [100, 300]
+    },
+    {
+      "parameters": {
+        "url": "=https://acos.aquacolloids.local/api/v1/operations/procurement/reorder",
+        "method": "POST",
+        "bodyParameters": {
+          "item": "={{ $json.body.item }}"
+        }
+      },
+      "id": "node-auto-po",
+      "name": "Draft Auto-Reorder Import PO",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [300, 300]
+    },
+    {
+      "parameters": {
+        "url": "=https://acos.aquacolloids.local/api/v1/operations/quality/log-deviation",
+        "method": "POST",
+        "bodyParameters": {
+          "batchNo": "={{ $json.body.batchNo }}",
+          "notes": "={{ $json.body.notes }}"
+        }
+      },
+      "id": "node-log-deviation",
+      "name": "Log CAPA QC deviation entry",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [500, 300]
+    }
+  ],
+  "connections": {
+    "trigger-webhook-operations": {
+      "main": [
+        [
+          {
+            "node": "node-auto-po",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "node-auto-po": {
+      "main": [
+        [
+          {
+            "node": "node-log-deviation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

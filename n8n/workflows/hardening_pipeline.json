@@ -1,0 +1,65 @@
+{
+  "name": "ACOS Platform Hardening backups and security auditing",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "platform-backup",
+        "options": {}
+      },
+      "id": "trigger-webhook-hardening",
+      "name": "Webhook: Daily Backup Event",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [100, 300]
+    },
+    {
+      "parameters": {
+        "url": "=https://acos.aquacolloids.local/api/v1/platform/disaster-recovery/backup",
+        "method": "POST",
+        "bodyParameters": {}
+      },
+      "id": "node-db-backup",
+      "name": "Trigger WAL-G DB Backup Snapshot",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [300, 300]
+    },
+    {
+      "parameters": {
+        "url": "=https://acos.aquacolloids.local/api/v1/platform/security/compliance-scan",
+        "method": "POST",
+        "bodyParameters": {}
+      },
+      "id": "node-compliance-check",
+      "name": "Run DPDP Compliance Security Audit",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [500, 300]
+    }
+  ],
+  "connections": {
+    "trigger-webhook-hardening": {
+      "main": [
+        [
+          {
+            "node": "node-db-backup",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "node-db-backup": {
+      "main": [
+        [
+          {
+            "node": "node-compliance-check",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

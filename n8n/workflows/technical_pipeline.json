@@ -1,0 +1,99 @@
+{
+  "name": "ACOS Technical Commercialization and LIMS Queue Automation",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "technical-discover",
+        "options": {}
+      },
+      "id": "trigger-webhook-tech",
+      "name": "Webhook: Technical Discovery Form Ingest",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [100, 300]
+    },
+    {
+      "parameters": {
+        "url": "=https://acos.aquacolloids.local/api/v1/technical/recommend",
+        "method": "POST",
+        "bodyParameters": {
+          "problemStatement": "={{ $json.body.problem }}"
+        }
+      },
+      "id": "node-ai-recommendation",
+      "name": "Call AI Recommendation Engine",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [300, 300]
+    },
+    {
+      "parameters": {
+        "url": "=https://acos.aquacolloids.local/api/v1/lab/tests/schedule",
+        "method": "POST",
+        "bodyParameters": {
+          "productId": "={{ $json.body.productId }}",
+          "batchNo": "={{ $json.body.batchNo }}"
+        }
+      },
+      "id": "node-schedule-tests",
+      "name": "Schedule Batch Analytical Lab Tests",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [500, 300]
+    },
+    {
+      "parameters": {
+        "url": "https://api.meta.whatsapp.com/v1/messages",
+        "method": "POST",
+        "headers": {
+          "Authorization": "Bearer ={{ $credentials.whatsappToken }}"
+        },
+        "bodyParameters": {
+          "to": "={{ $json.body.managerPhone }}",
+          "template": "acos_lab_alert"
+        }
+      },
+      "id": "node-alert-qa",
+      "name": "Send Quality Manager Alert Template",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [700, 300]
+    }
+  ],
+  "connections": {
+    "trigger-webhook-tech": {
+      "main": [
+        [
+          {
+            "node": "node-ai-recommendation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "node-ai-recommendation": {
+      "main": [
+        [
+          {
+            "node": "node-schedule-tests",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "node-schedule-tests": {
+      "main": [
+        [
+          {
+            "node": "node-alert-qa",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

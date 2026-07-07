@@ -1,0 +1,423 @@
+@import "tailwindcss";
+
+@theme {
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-sora), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, SFMono-Regular, monospace;
+
+  /* Custom shadows */
+  --shadow-glass: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
+  --shadow-glass-md: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.04);
+
+  /* Custom animations and keyframes */
+  @keyframes shimmer {
+    from { background-position: -200% 0; }
+    to { background-position: 200% 0; }
+  }
+  --animate-shimmer: shimmer 2s linear infinite;
+}
+
+/* =============================================================================
+   ACOS Design System — Global CSS
+   Aqua Colloids Operating System
+   ============================================================================= */
+
+/* -----------------------------------------------------------------------------
+   Font Face Declarations
+   ----------------------------------------------------------------------------- */
+@layer base {
+  @font-face {
+    font-family: 'Sora';
+    font-style: normal;
+    font-weight: 100 800;
+    font-display: swap;
+    src: url('https://fonts.gstatic.com/s/sora/v12/xMQOuFFYT72X5wkB_18qmnndmSdSn3-KIwNhBti0.woff2')
+      format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+      U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212,
+      U+2215, U+FEFF, U+FFFD;
+  }
+
+  @font-face {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 100 900;
+    font-display: swap;
+    src: url('https://fonts.gstatic.com/s/inter/v18/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuLyfAZ9hiA.woff2')
+      format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+      U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212,
+      U+2215, U+FEFF, U+FFFD;
+  }
+
+  @font-face {
+    font-family: 'JetBrains Mono';
+    font-style: normal;
+    font-weight: 100 800;
+    font-display: swap;
+    src: url('https://fonts.gstatic.com/s/jetbrainsmono/v18/tDbY2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKxjPtBgeu3n3g.woff2')
+      format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+      U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212,
+      U+2215, U+FEFF, U+FFFD;
+  }
+}
+
+/* -----------------------------------------------------------------------------
+   CSS Custom Properties — Design Tokens
+   ----------------------------------------------------------------------------- */
+@layer base {
+  :root {
+    /* Background & Foreground */
+    --background: 0 0% 100%;
+    --foreground: 222 47% 11%;
+
+    /* Card */
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
+
+    /* Popover */
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+
+    /* Primary — Ocean Blue */
+    --primary: 213 94% 50%;
+    --primary-foreground: 0 0% 100%;
+
+    /* Secondary */
+    --secondary: 214 32% 91%;
+    --secondary-foreground: 222 47% 11%;
+
+    /* Muted */
+    --muted: 214 32% 96%;
+    --muted-foreground: 215 16% 47%;
+
+    /* Accent — Seaweed Green */
+    --accent: 142 71% 45%;
+    --accent-foreground: 0 0% 100%;
+
+    /* Destructive */
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    /* Border, Input, Ring */
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
+    --ring: 213 94% 50%;
+
+    /* Border Radius */
+    --radius: 0.5rem;
+
+    /* Charts */
+    --chart-1: 213 94% 50%;
+    --chart-2: 142 71% 45%;
+    --chart-3: 25 95% 53%;
+    --chart-4: 262 80% 63%;
+    --chart-5: 340 75% 55%;
+
+    /* Sidebar */
+    --sidebar-background: 222 47% 8%;
+    --sidebar-foreground: 213 30% 85%;
+    --sidebar-primary: 213 94% 60%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 213 30% 15%;
+    --sidebar-accent-foreground: 213 30% 90%;
+    --sidebar-border: 213 30% 15%;
+    --sidebar-ring: 213 94% 50%;
+
+    /* Ocean Blue Brand Tokens */
+    --ocean-50: 211 100% 97%;
+    --ocean-100: 213 100% 93%;
+    --ocean-200: 213 100% 87%;
+    --ocean-300: 213 97% 75%;
+    --ocean-400: 213 92% 67%;
+    --ocean-500: 213 94% 57%;
+    --ocean-600: 213 89% 51%;
+    --ocean-700: 220 83% 47%;
+    --ocean-800: 222 74% 39%;
+    --ocean-900: 223 68% 32%;
+    --ocean-950: 225 71% 20%;
+
+    /* Seaweed Green Brand Tokens */
+    --seaweed-50: 143 100% 97%;
+    --seaweed-100: 143 96% 87%;
+    --seaweed-200: 143 96% 75%;
+    --seaweed-300: 142 85% 62%;
+    --seaweed-400: 142 72% 50%;
+    --seaweed-500: 142 71% 45%;
+    --seaweed-600: 142 76% 37%;
+    --seaweed-700: 142 72% 29%;
+    --seaweed-800: 143 65% 24%;
+    --seaweed-900: 144 61% 20%;
+    --seaweed-950: 145 80% 10%;
+  }
+
+  .dark {
+    /* Background & Foreground */
+    --background: 222 47% 7%;
+    --foreground: 210 40% 98%;
+
+    /* Card */
+    --card: 222 47% 9%;
+    --card-foreground: 210 40% 98%;
+
+    /* Popover */
+    --popover: 222 47% 9%;
+    --popover-foreground: 210 40% 98%;
+
+    /* Primary — Ocean Blue */
+    --primary: 213 94% 60%;
+    --primary-foreground: 222 47% 7%;
+
+    /* Secondary */
+    --secondary: 217 33% 15%;
+    --secondary-foreground: 210 40% 98%;
+
+    /* Muted */
+    --muted: 217 33% 13%;
+    --muted-foreground: 215 20% 60%;
+
+    /* Accent — Seaweed Green */
+    --accent: 142 71% 45%;
+    --accent-foreground: 0 0% 100%;
+
+    /* Destructive */
+    --destructive: 0 63% 31%;
+    --destructive-foreground: 0 0% 100%;
+
+    /* Border, Input, Ring */
+    --border: 217 33% 17%;
+    --input: 217 33% 17%;
+    --ring: 213 94% 60%;
+
+    /* Charts */
+    --chart-1: 213 94% 60%;
+    --chart-2: 142 71% 45%;
+    --chart-3: 25 95% 60%;
+    --chart-4: 262 80% 70%;
+    --chart-5: 340 75% 62%;
+
+    /* Sidebar */
+    --sidebar-background: 222 47% 5%;
+    --sidebar-foreground: 213 30% 80%;
+    --sidebar-primary: 213 94% 60%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 213 30% 12%;
+    --sidebar-accent-foreground: 213 30% 90%;
+    --sidebar-border: 213 30% 12%;
+    --sidebar-ring: 213 94% 60%;
+  }
+}
+
+/* -----------------------------------------------------------------------------
+   Base Styles
+   ----------------------------------------------------------------------------- */
+@layer base {
+  * {
+    border-color: hsl(var(--border));
+  }
+
+  html {
+    @apply scroll-smooth antialiased;
+    font-feature-settings: 'rlig' 1, 'calt' 1, 'ss01' 1;
+    text-rendering: optimizeLegibility;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans;
+    font-synthesis: none;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display tracking-tight;
+  }
+
+  /* Focus visible ring */
+  :focus-visible {
+    @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
+  }
+
+  /* Disabled states */
+  [disabled],
+  [aria-disabled="true"] {
+    @apply cursor-not-allowed opacity-50;
+  }
+
+  /* Selection color */
+  ::selection {
+    @apply bg-primary/20 text-foreground;
+  }
+}
+
+/* -----------------------------------------------------------------------------
+   Custom Scrollbar
+   ----------------------------------------------------------------------------- */
+@layer utilities {
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: hsl(var(--border)) transparent;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background-color: hsl(var(--border));
+    border-radius: 3px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+    background-color: hsl(var(--muted-foreground));
+  }
+
+  .scrollbar-none {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* -----------------------------------------------------------------------------
+   Glassmorphism Utilities
+   ----------------------------------------------------------------------------- */
+@layer utilities {
+  .glass {
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+  }
+
+  .glass-dark {
+    background: rgba(0, 0, 0, 0.24);
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .glass-ocean {
+    background: rgba(26, 116, 232, 0.1);
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    border: 1px solid rgba(26, 116, 232, 0.2);
+  }
+
+  .glass-card {
+    @apply rounded-xl border bg-card/60 backdrop-blur-md shadow-glass;
+  }
+
+  /* Gradient text */
+  .gradient-text-ocean {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(135deg, hsl(213 94% 50%) 0%, hsl(198 88% 42%) 100%);
+  }
+
+  .gradient-text-seaweed {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(135deg, hsl(142 71% 45%) 0%, hsl(160 60% 38%) 100%);
+  }
+
+  /* Shimmer loading effect */
+  .shimmer {
+    background: linear-gradient(
+      90deg,
+      hsl(var(--muted)) 0%,
+      hsl(var(--muted-foreground) / 0.1) 50%,
+      hsl(var(--muted)) 100%
+    );
+    background-size: 200% 100%;
+    @apply animate-shimmer;
+  }
+
+  /* KPI card */
+  .kpi-card {
+    @apply relative overflow-hidden rounded-xl border bg-card p-6 shadow-glass transition-shadow duration-300 hover:shadow-glass-md;
+  }
+
+  /* Section header */
+  .section-header {
+    @apply flex items-center justify-between pb-4 border-b border-border mb-6;
+  }
+
+  /* Data table container */
+  .table-container {
+    @apply rounded-lg border border-border overflow-hidden;
+  }
+
+  /* Status badge base */
+  .status-badge {
+    @apply inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium ring-1 ring-inset;
+  }
+}
+
+/* -----------------------------------------------------------------------------
+   Animation Keyframes (extended)
+   ----------------------------------------------------------------------------- */
+@layer utilities {
+  .animate-in {
+    animation: fade-in 0.2s ease-out;
+  }
+
+  .animate-out {
+    animation: fade-out 0.2s ease-in;
+  }
+}
+
+/* -----------------------------------------------------------------------------
+   Typography Prose Overrides
+   ----------------------------------------------------------------------------- */
+@layer components {
+  .prose {
+    @apply max-w-none;
+  }
+
+  .prose h1 {
+    @apply font-display text-3xl font-bold tracking-tight;
+  }
+
+  .prose h2 {
+    @apply font-display text-2xl font-semibold tracking-tight;
+  }
+
+  .prose h3 {
+    @apply font-display text-xl font-semibold;
+  }
+
+  .prose code {
+    @apply font-mono text-sm bg-muted px-1.5 py-0.5 rounded text-foreground;
+  }
+
+  .prose pre code {
+    @apply bg-transparent p-0;
+  }
+}

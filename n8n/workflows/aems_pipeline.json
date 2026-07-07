@@ -1,0 +1,48 @@
+{
+  "name": "ACOS Enterprise Engineering Management System github sync",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "aems-issue-create",
+        "options": {}
+      },
+      "id": "trigger-webhook-aems",
+      "name": "Webhook: AEMS Issue Created",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [100, 300]
+    },
+    {
+      "parameters": {
+        "url": "=https://api.github.com/repos/aquacolloids/acos/issues",
+        "method": "POST",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBasicAuth",
+        "bodyParameters": {
+          "title": "={{ $json.body.title }}",
+          "body": "={{ $json.body.description }}",
+          "labels": "={{ $json.body.labels }}"
+        }
+      },
+      "id": "node-github-create",
+      "name": "Sync Issue to GitHub Repository",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [300, 300]
+    }
+  ],
+  "connections": {
+    "trigger-webhook-aems": {
+      "main": [
+        [
+          {
+            "node": "node-github-create",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "name": "ACOS Enterprise Launch notifications and status checks",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "launch-alert",
+        "options": {}
+      },
+      "id": "trigger-webhook-launch",
+      "name": "Webhook: Go-Live Release Signal",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [100, 300]
+    },
+    {
+      "parameters": {
+        "url": "=https://acos.aquacolloids.local/api/v1/platform/release-notification",
+        "method": "POST",
+        "bodyParameters": {}
+      },
+      "id": "node-release-email",
+      "name": "Email Go-Live Release Notes to Managers",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [300, 300]
+    },
+    {
+      "parameters": {
+        "url": "=https://acos.aquacolloids.local/api/v1/platform/support/sla-alert",
+        "method": "POST",
+        "bodyParameters": {}
+      },
+      "id": "node-support-alert",
+      "name": "Dispatch support SLA alert via Telegram",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [500, 300]
+    }
+  ],
+  "connections": {
+    "trigger-webhook-launch": {
+      "main": [
+        [
+          {
+            "node": "node-release-email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "node-release-email": {
+      "main": [
+        [
+          {
+            "node": "node-support-alert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

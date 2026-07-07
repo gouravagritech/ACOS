@@ -1,0 +1,10 @@
+﻿[project]
+id = "acos"
+
+[api]
+port = 54321
+schemas = ["public", "auth", "ai", "audit"]
+
+[db]
+port = 54322
+shadow_port = 54323

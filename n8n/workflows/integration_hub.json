@@ -1,0 +1,69 @@
+{
+  "name": "ACOS Enterprise Integration Hub and hyperautomation retry queues",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "erp-billing-sync",
+        "options": {}
+      },
+      "id": "trigger-webhook-integration",
+      "name": "Webhook: Order Release Event",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [100, 300]
+    },
+    {
+      "parameters": {
+        "url": "=https://acos.aquacolloids.local/api/v1/integrations/sap/billing",
+        "method": "POST",
+        "bodyParameters": {
+          "orderId": "={{ $json.body.orderId }}"
+        }
+      },
+      "id": "node-sap-billing",
+      "name": "Sync Billing Invoice data to SAP ERP",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [300, 300]
+    },
+    {
+      "parameters": {
+        "url": "=https://acos.aquacolloids.local/api/v1/integrations/tally/ledger",
+        "method": "POST",
+        "bodyParameters": {
+          "orderId": "={{ $json.body.orderId }}"
+        }
+      },
+      "id": "node-tally-ledger",
+      "name": "Post financial ledger debit entry to Tally",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [500, 300]
+    }
+  ],
+  "connections": {
+    "trigger-webhook-integration": {
+      "main": [
+        [
+          {
+            "node": "node-sap-billing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "node-sap-billing": {
+      "main": [
+        [
+          {
+            "node": "node-tally-ledger",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

@@ -1,0 +1,70 @@
+{
+  "name": "ACOS Enterprise AI Graph and RAG orchestrations",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "ai-rag-ingest",
+        "options": {}
+      },
+      "id": "trigger-webhook-ai",
+      "name": "Webhook: Document Ingestion Trigger",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [100, 300]
+    },
+    {
+      "parameters": {
+        "url": "=https://acos.aquacolloids.local/api/v1/ai/embed",
+        "method": "POST",
+        "bodyParameters": {
+          "text": "={{ $json.body.content }}"
+        }
+      },
+      "id": "node-generate-vector",
+      "name": "Generate 1536-dim vector embeddings",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [300, 300]
+    },
+    {
+      "parameters": {
+        "url": "=https://acos.aquacolloids.local/api/v1/ai/graph/sync-nodes",
+        "method": "POST",
+        "bodyParameters": {
+          "source": "={{ $json.body.source }}",
+          "target": "={{ $json.body.target }}"
+        }
+      },
+      "id": "node-graph-sync",
+      "name": "Sync Neo4j Directed Graph Edges",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [500, 300]
+    }
+  ],
+  "connections": {
+    "trigger-webhook-ai": {
+      "main": [
+        [
+          {
+            "node": "node-generate-vector",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "node-generate-vector": {
+      "main": [
+        [
+          {
+            "node": "node-graph-sync",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

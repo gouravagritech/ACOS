@@ -1,0 +1,4 @@
+﻿*       @aquagri/tech-leads
+/packages/db/   @aquagri/db-admins
+/supabase/      @aquagri/db-admins
+/n8n/           @aquagri/automation-leads
